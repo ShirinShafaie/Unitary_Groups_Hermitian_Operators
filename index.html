@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2.1 - Shirin Shafaie</title>
+    
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151933;
+            --bg-tertiary: #1e2341;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent-blue: #4285f4;
+            --accent-green: #34a853;
+            --accent-yellow: #fbbc04;
+            --accent-red: #ea4335;
+            --accent-purple: #b388ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .student-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+        }
+
+        .proof-box {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .theorem {
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.15), rgba(52, 168, 83, 0.15));
+            border: 2px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .theorem-title {
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.1em;
+        }
+
+        .step {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+
+        .viz-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .viz-panel {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .viz-title {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 400px;
+            background: var(--bg-primary);
+        }
+
+        .controls {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .control-group {
+            margin: 1rem 0;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-value {
+            color: var(--accent-yellow);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: var(--glass);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .button {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+
+        .button.active {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-yellow));
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .matrix-display {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 1rem 0;
+        }
+
+        .verification-box {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .verification-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+        }
+
+        .verification-value {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .animation-controls {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .speed-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .speed-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .speed-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        @media (max-width: 1024px) {
+            .viz-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="student-info">Shirin Shafaie · Due: 21 October 2025</div>
+            <div class="course-info">Geometry of Quantum Mechanics, Assignment 2 · Professor Marco Gualtieri · Fields Institute</div>
+            <h1>Exercise 2: Unitary Groups and Hermitian Operators</h1>
+            <div style="font-size: 0.9em; color: var(--text-secondary); margin-top: 1rem;">
+                <strong>Question 1:</strong> Diagonalization of unitary operators and their eigenvalues
+            </div>
+        </div>
+
+        <!-- THEOREM STATEMENT -->
+        <div class="section">
+            <div class="theorem">
+                <div class="theorem-title">Theorem (Spectral Theorem for Unitary Operators)</div>
+                <p><strong>Part (a):</strong> Any unitary operator $U: V \to V$ on a finite-dimensional Hilbert space may be diagonalized in an orthonormal basis.</p>
+                <p style="margin-top: 1rem;"><strong>Part (b):</strong> The eigenvalues of a unitary operator satisfy $|\lambda| = 1$; that is, they lie on the unit circle in $\mathbb{C}$.</p>
+            </div>
+        </div>
+
+        <!-- PROOF PART A -->
+        <div class="section">
+            <div class="section-title">Proof: Part (a) — Diagonalizability</div>
+            
+            <div class="proof-box">
+                <p><strong>Strategy:</strong> We show that $U$ is a normal operator ($UU^* = U^*U$), then apply the spectral theorem for normal operators.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Show that $U$ is normal</strong>
+                <p style="margin-top: 0.5rem;">A unitary operator satisfies $UU^* = I$ (identity). We verify normality:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$UU^* = I$$
+                </div>
+                <p>Multiply on the left by $U^*$ and on the right by $U$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U^*(UU^*)U = U^*IU = U^*U$$
+                </div>
+                <p>But also multiply the first equation on the left by $U^*$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U^*(UU^*) = U^*I = U^*$$
+                    $$(U^*U)U^* = U^*$$
+                </div>
+                <p>And multiply the first equation on the right by $U$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$(UU^*)U = IU = U$$
+                    $$U(U^*U) = U$$
+                </div>
+                <p>From $UU^* = I$, multiply both sides by $U^*$ on the left: $U^*UU^* = U^*$. Then multiply by $U$ on the right: $U^*U = I$.</p>
+                <p style="margin-top: 0.5rem;">Therefore $UU^* = U^*U = I$, so $U$ is normal.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Apply spectral theorem for normal operators</strong>
+                <p style="margin-top: 0.5rem;">The spectral theorem states: any normal operator on a finite-dimensional complex inner product space has an orthonormal basis of eigenvectors.</p>
+                <p style="margin-top: 0.5rem;"><em>Proof sketch:</em> For normal operators, eigenvectors corresponding to distinct eigenvalues are orthogonal. By induction on dimension and restricting to invariant subspaces, we construct a complete orthonormal eigenbasis.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Construct the diagonalization</strong>
+                <p style="margin-top: 0.5rem;">Let $(e_1, e_2, \ldots, e_n)$ be an orthonormal eigenbasis with $U(e_i) = \lambda_i e_i$.</p>
+                <p style="margin-top: 0.5rem;">In this basis, $U$ has the diagonal matrix representation:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U = \begin{pmatrix}
+                    \lambda_1 & 0 & \cdots & 0 \\
+                    0 & \lambda_2 & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & \lambda_n
+                    \end{pmatrix}$$
+                </div>
+            </div>
+        </div>
+
+        <!-- PROOF PART B -->
+        <div class="section">
+            <div class="section-title">Proof: Part (b) — Eigenvalues on Unit Circle</div>
+            
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Setup</strong>
+                <p style="margin-top: 0.5rem;">Let $v \neq 0$ be an eigenvector with eigenvalue $\lambda$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U(v) = \lambda v$$
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Apply unitarity condition</strong>
+                <p style="margin-top: 0.5rem;">Unitary operators preserve inner products: $\langle Ux, Uy \rangle = \langle x, y \rangle$ for all $x, y \in V$.</p>
+                <p style="margin-top: 0.5rem;">Apply this with $x = y = v$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$\langle Uv, Uv \rangle = \langle v, v \rangle$$
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Substitute eigenvalue relation</strong>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$\langle \lambda v, \lambda v \rangle = \langle v, v \rangle$$
+                </div>
+                <p style="margin-top: 0.5rem;">Using the sesquilinearity of the inner product: $\langle \alpha v, \beta w \rangle = \bar{\alpha}\beta \langle v, w \rangle$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$\bar{\lambda}\lambda \langle v, v \rangle = \langle v, v \rangle$$
+                    $$|\lambda|^2 \langle v, v \rangle = \langle v, v \rangle$$
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Conclude</strong>
+                <p style="margin-top: 0.5rem;">Since $v \neq 0$, we have $\langle v, v \rangle > 0$. Dividing both sides:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$|\lambda|^2 = 1$$
+                    $$|\lambda| = 1$$
+                </div>
+                <p style="margin-top: 0.5rem;">Therefore, all eigenvalues lie on the unit circle: $\lambda = e^{i\theta}$ for some $\theta \in [0, 2\pi)$.</p>
+            </div>
+
+            <div class="proof-box">
+                <p><strong>Physical interpretation:</strong> Unitary operators represent symmetries and time evolution in quantum mechanics. Eigenvalues $e^{i\theta}$ represent phase shifts—pure rotations in the complex plane that preserve probabilities (since $|e^{i\theta}|^2 = 1$).</p>
+            </div>
+        </div>
+
+        <!-- INTERACTIVE EXPLORATION -->
+        <div class="section">
+            <div class="section-title">Interactive Exploration: 2×2 Unitary Matrices</div>
+            
+            <p style="margin-bottom: 1.5rem;">
+                Every 2×2 unitary matrix can be parametrized as:
+                $$U = e^{i\alpha} \begin{pmatrix} \cos\theta & -\sin\theta \, e^{i\phi} \\ \sin\theta \, e^{-i\phi} & \cos\theta \end{pmatrix}$$
+                Adjust the parameters below to explore different unitary operators.
+            </p>
+
+            <div class="viz-container">
+                <div class="viz-panel">
+                    <div class="viz-title">Eigenvalues on Unit Circle</div>
+                    <canvas id="eigenvalue-canvas"></canvas>
+                </div>
+                <div class="viz-panel">
+                    <div class="viz-title">Action on Vectors</div>
+                    <canvas id="action-canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label class="control-label">Global Phase α: <span class="control-value" id="val-alpha">0°</span></label>
+                    <input type="range" id="ctrl-alpha" min="0" max="360" value="0" step="1">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Rotation θ: <span class="control-value" id="val-theta">45°</span></label>
+                    <input type="range" id="ctrl-theta" min="0" max="180" value="45" step="1">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Phase φ: <span class="control-value" id="val-phi">0°</span></label>
+                    <input type="range" id="ctrl-phi" min="0" max="360" value="0" step="1">
+                </div>
+
+                <div class="animation-controls">
+                    <div style="font-size: 0.85em; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Animation</div>
+                    
+                    <div class="button-group">
+                        <button class="button" id="btn-animate">Start Smooth Loop</button>
+                        <button class="button" id="btn-examples">Load Example</button>
+                    </div>
+
+                    <div style="margin-top: 1rem;">
+                        <label style="font-size: 0.85em; color: var(--text-secondary);">Speed:</label>
+                        <div class="speed-selector">
+                            <div class="speed-btn" data-speed="0.3">Slow</div>
+                            <div class="speed-btn active" data-speed="1">Medium</div>
+                            <div class="speed-btn" data-speed="3">Fast</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MATRIX DISPLAY AND VERIFICATION -->
+        <div class="section">
+            <div class="section-title">Numerical Verification</div>
+            
+            <div class="matrix-display">
+                <div style="margin-bottom: 1rem;"><strong>Current Matrix U:</strong></div>
+                <div id="matrix-display" style="font-size: 1.1em;"></div>
+            </div>
+
+            <div class="verification-box">
+                <div style="font-weight: 600; margin-bottom: 1rem; color: var(--accent-green);">Verification Checks</div>
+                
+                <div class="verification-item">
+                    <div>Unitarity: ||UU* - I||</div>
+                    <div class="verification-value" id="verify-unitary">0.000000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>Normality: ||UU* - U*U||</div>
+                    <div class="verification-value" id="verify-normal">0.000000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>Eigenvalue λ₁: magnitude</div>
+                    <div class="verification-value" id="verify-eigen1">1.000000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>Eigenvalue λ₂: magnitude</div>
+                    <div class="verification-value" id="verify-eigen2">1.000000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>λ₁ angle (degrees)</div>
+                    <div class="verification-value" id="angle-eigen1">0.0°</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>λ₂ angle (degrees)</div>
+                    <div class="verification-value" id="angle-eigen2">0.0°</div>
+                </div>
+
+                <div class="verification-item">
+                    <div>Orthonormality: |⟨v₁, v₂⟩|</div>
+                    <div class="verification-value" id="verify-ortho">0.000000</div>
+                </div>
+
+                <div class="verification-item">
+                    <div>Eigenvector norms: ||v₁||, ||v₂||</div>
+                    <div class="verification-value" id="verify-norms">1.000, 1.000</div>
+                </div>
+            </div>
+
+            <div class="matrix-display">
+                <div style="margin-bottom: 1rem;"><strong>Eigenvectors (orthonormal basis):</strong></div>
+                <div id="eigenvector-display" style="font-size: 1.1em;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        function setupCanvas(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            return { ctx, width: rect.width, height: rect.height };
+        }
+
+        // Complex number operations
+        const C = {
+            add: (a, b) => ({ re: a.re + b.re, im: a.im + b.im }),
+            sub: (a, b) => ({ re: a.re - b.re, im: a.im - b.im }),
+            mul: (a, b) => ({ re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re }),
+            conj: (a) => ({ re: a.re, im: -a.im }),
+            abs: (a) => Math.sqrt(a.re * a.re + a.im * a.im),
+            arg: (a) => Math.atan2(a.im, a.re),
+            exp: (theta) => ({ re: Math.cos(theta), im: Math.sin(theta) }),
+            scale: (a, s) => ({ re: a.re * s, im: a.im * s }),
+            sqrt: (z) => {
+                const r = C.abs(z);
+                const theta = C.arg(z);
+                const sqrtR = Math.sqrt(r);
+                return { 
+                    re: sqrtR * Math.cos(theta / 2), 
+                    im: sqrtR * Math.sin(theta / 2) 
+                };
+            }
+        };
+
+        // Matrix operations (2x2 complex)
+        const M = {
+            mul: (A, B) => [
+                [C.add(C.mul(A[0][0], B[0][0]), C.mul(A[0][1], B[1][0])),
+                 C.add(C.mul(A[0][0], B[0][1]), C.mul(A[0][1], B[1][1]))],
+                [C.add(C.mul(A[1][0], B[0][0]), C.mul(A[1][1], B[1][0])),
+                 C.add(C.mul(A[1][0], B[0][1]), C.mul(A[1][1], B[1][1]))]
+            ],
+            
+            adj: (A) => [
+                [C.conj(A[0][0]), C.conj(A[1][0])],
+                [C.conj(A[0][1]), C.conj(A[1][1])]
+            ],
+            
+            sub: (A, B) => [
+                [C.sub(A[0][0], B[0][0]), C.sub(A[0][1], B[0][1])],
+                [C.sub(A[1][0], B[1][0]), C.sub(A[1][1], B[1][1])]
+            ],
+            
+            norm: (A) => Math.sqrt(
+                C.abs(A[0][0])**2 + C.abs(A[0][1])**2 +
+                C.abs(A[1][0])**2 + C.abs(A[1][1])**2
+            ),
+            
+            apply: (A, v) => [
+                C.add(C.mul(A[0][0], v[0]), C.mul(A[0][1], v[1])),
+                C.add(C.mul(A[1][0], v[0]), C.mul(A[1][1], v[1]))
+            ]
+        };
+
+        // Build unitary matrix from parameters
+        function buildUnitary(alpha, theta, phi) {
+            const c = Math.cos(theta);
+            const s = Math.sin(theta);
+            const ea = C.exp(alpha);
+            const ep = C.exp(phi);
+            const em = C.exp(-phi);
+            
+            return [
+                [C.mul(ea, {re: c, im: 0}), C.mul(C.mul(ea, {re: -s, im: 0}), ep)],
+                [C.mul(C.mul(ea, {re: s, im: 0}), em), C.mul(ea, {re: c, im: 0})]
+            ];
+        }
+
+        // Compute eigenvalues of 2x2 matrix using quadratic formula with complex sqrt
+        function eigenvalues2x2(A) {
+            const tr = C.add(A[0][0], A[1][1]);
+            const det = C.sub(C.mul(A[0][0], A[1][1]), C.mul(A[0][1], A[1][0]));
+            
+            const tr2 = C.mul(tr, tr);
+            const fourdet = C.scale(det, 4);
+            const disc = C.sub(tr2, fourdet);
+            const sqrtDisc = C.sqrt(disc);
+            
+            const lambda1 = C.scale(C.add(tr, sqrtDisc), 0.5);
+            const lambda2 = C.scale(C.sub(tr, sqrtDisc), 0.5);
+            
+            return [lambda1, lambda2];
+        }
+
+        // Compute eigenvectors using nullspace method
+        function eigenvectors2x2(A, lambda1, lambda2) {
+            function computeEigenvector(A, lambda) {
+                const a11 = C.sub(A[0][0], lambda);
+                const a12 = A[0][1];
+                const a21 = A[1][0];
+                const a22 = C.sub(A[1][1], lambda);
+                
+                let v = [C.scale(a12, -1), a11];
+                let norm = Math.sqrt(C.abs(v[0])**2 + C.abs(v[1])**2);
+                
+                if (norm < 1e-10) {
+                    v = [C.scale(a22, -1), a21];
+                    norm = Math.sqrt(C.abs(v[0])**2 + C.abs(v[1])**2);
+                }
+                
+                if (norm < 1e-10) {
+                    return [{re: 1, im: 0}, {re: 0, im: 0}];
+                }
+                
+                return [C.scale(v[0], 1/norm), C.scale(v[1], 1/norm)];
+            }
+            
+            const v1 = computeEigenvector(A, lambda1);
+            const v2 = computeEigenvector(A, lambda2);
+            
+            return [v1, v2];
+        }
+
+        // Format complex number for display
+        function formatComplex(z, prec = 3) {
+            const r = z.re.toFixed(prec);
+            const i = Math.abs(z.im).toFixed(prec);
+            if (Math.abs(z.im) < 1e-10) return r;
+            const sign = z.im >= 0 ? '+' : '-';
+            return `${r} ${sign} ${i}i`;
+        }
+
+        // State
+        let alpha = 0, theta = Math.PI/4, phi = 0;
+        let isAnimating = false;
+        let animSpeed = 1;
+        let animTime = 0;
+
+        const examples = [
+            { name: "Identity", alpha: 0, theta: 0, phi: 0 },
+            { name: "π/2 rotation", alpha: 0, theta: Math.PI/2, phi: 0 },
+            { name: "Phase gate", alpha: 0, theta: 0, phi: Math.PI/4 },
+            { name: "Hadamard-like", alpha: 0, theta: Math.PI/4, phi: Math.PI }
+        ];
+        let exampleIdx = 0;
+
+        // Smooth interpolation for animations
+        function lerp(a, b, t) {
+            return a + (b - a) * t;
+        }
+
+        // Drawing functions
+        function drawEigenvalues() {
+            const { ctx, width, height } = setupCanvas('eigenvalue-canvas');
+            ctx.clearRect(0, 0, width, height);
+            
+            const cx = width / 2;
+            const cy = height / 2;
+            const r = Math.min(width, height) * 0.35;
+            
+            // Unit circle
+            ctx.strokeStyle = '#4285f4';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(width, cy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, height);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#9aa0a6';
+            ctx.font = '12px monospace';
+            ctx.fillText('Re', width - 30, cy - 10);
+            ctx.fillText('Im', cx + 10, 20);
+            ctx.fillText('|λ| = 1', cx + r * 0.7, cy - r * 0.7);
+            
+            // Compute and draw eigenvalues
+            const U = buildUnitary(alpha, theta, phi);
+            const [lambda1, lambda2] = eigenvalues2x2(U);
+            
+            // Lambda 1
+            const x1 = cx + r * lambda1.re;
+            const y1 = cy - r * lambda1.im;
+            
+            ctx.strokeStyle = '#34a853';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#34a853';
+            ctx.beginPath();
+            ctx.arc(x1, y1, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Lambda 2
+            const x2 = cx + r * lambda2.re;
+            const y2 = cy - r * lambda2.im;
+            
+            ctx.strokeStyle = '#fbbc04';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.beginPath();
+            ctx.arc(x2, y2, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#34a853';
+            ctx.font = '14px monospace';
+            ctx.fillText('λ₁', x1 + 12, y1);
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.fillText('λ₂', x2 + 12, y2);
+        }
+
+        function drawAction() {
+            const { ctx, width, height } = setupCanvas('action-canvas');
+            ctx.clearRect(0, 0, width, height);
+            
+            const cx = width / 2;
+            const cy = height / 2;
+            const scale = Math.min(width, height) * 0.3;
+            
+            // Axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(width, cy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, height);
+            ctx.stroke();
+            
+            // Grid
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let i = -1; i <= 1; i += 0.5) {
+                if (i === 0) continue;
+                const x = cx + i * scale;
+                const y = cy - i * scale;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+            
+            const U = buildUnitary(alpha, theta, phi);
+            
+            // Draw several input vectors and their images
+            const testVectors = [
+                [{re: 1, im: 0}, {re: 0, im: 0}],
+                [{re: 0, im: 0}, {re: 1, im: 0}],
+                [{re: 0.7071, im: 0}, {re: 0.7071, im: 0}],
+                [{re: 0.7071, im: 0}, {re: -0.7071, im: 0}]
+            ];
+            
+            const colors = ['#4285f4', '#34a853', '#fbbc04', '#ea4335'];
+            
+            testVectors.forEach((v, i) => {
+                const Uv = M.apply(U, v);
+                
+                // Original vector (faded)
+                const x0 = cx + scale * v[0].re;
+                const y0 = cy - scale * v[0].im;
+                
+                ctx.strokeStyle = colors[i];
+                ctx.globalAlpha = 0.3;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(x0, y0);
+                ctx.stroke();
+                
+                // Transformed vector (bold)
+                const x1 = cx + scale * Uv[0].re;
+                const y1 = cy - scale * Uv[0].im;
+                
+                ctx.globalAlpha = 1;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(x1, y1);
+                ctx.stroke();
+                
+                // Arrowhead
+                const angle = Math.atan2(-(y1 - cy), x1 - cx);
+                ctx.save();
+                ctx.translate(x1, y1);
+                ctx.rotate(angle);
+                ctx.fillStyle = colors[i];
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(-10, 5);
+                ctx.lineTo(-10, -5);
+                ctx.fill();
+                ctx.restore();
+            });
+            
+            ctx.globalAlpha = 1;
+        }
+
+        function updateDisplays() {
+            const U = buildUnitary(alpha, theta, phi);
+            const [lambda1, lambda2] = eigenvalues2x2(U);
+            const [v1, v2] = eigenvectors2x2(U, lambda1, lambda2);
+            
+            // Matrix display
+            document.getElementById('matrix-display').innerHTML = `
+                [ ${formatComplex(U[0][0])}    ${formatComplex(U[0][1])} ]<br>
+                [ ${formatComplex(U[1][0])}    ${formatComplex(U[1][1])} ]
+            `;
+            
+            // Inner product for orthogonality check
+            const inner = C.add(C.mul(C.conj(v1[0]), v2[0]), C.mul(C.conj(v1[1]), v2[1]));
+            
+            // Eigenvector display
+            document.getElementById('eigenvector-display').innerHTML = `
+                v₁ = [ ${formatComplex(v1[0])}, ${formatComplex(v1[1])} ]ᵀ<br>
+                v₂ = [ ${formatComplex(v2[0])}, ${formatComplex(v2[1])} ]ᵀ<br>
+                <br>
+                Inner product: ⟨v₁, v₂⟩ = ${formatComplex(inner, 6)}
+            `;
+            
+            // Verification
+            const I = [
+                [{re: 1, im: 0}, {re: 0, im: 0}],
+                [{re: 0, im: 0}, {re: 1, im: 0}]
+            ];
+            
+            const Uadj = M.adj(U);
+            const UUadj = M.mul(U, Uadj);
+            const UadjU = M.mul(Uadj, U);
+            
+            const unitarity = M.norm(M.sub(UUadj, I));
+            const normality = M.norm(M.sub(UUadj, UadjU));
+            
+            const norm1 = Math.sqrt(C.abs(v1[0])**2 + C.abs(v1[1])**2);
+            const norm2 = Math.sqrt(C.abs(v2[0])**2 + C.abs(v2[1])**2);
+            
+            document.getElementById('verify-unitary').textContent = unitarity.toExponential(6);
+            document.getElementById('verify-normal').textContent = normality.toExponential(6);
+            document.getElementById('verify-eigen1').textContent = C.abs(lambda1).toFixed(6);
+            document.getElementById('verify-eigen2').textContent = C.abs(lambda2).toFixed(6);
+            document.getElementById('angle-eigen1').textContent = (C.arg(lambda1) * 180 / Math.PI).toFixed(1) + '°';
+            document.getElementById('angle-eigen2').textContent = (C.arg(lambda2) * 180 / Math.PI).toFixed(1) + '°';
+            document.getElementById('verify-ortho').textContent = C.abs(inner).toExponential(6);
+            document.getElementById('verify-norms').textContent = `${norm1.toFixed(6)}, ${norm2.toFixed(6)}`;
+        }
+
+        function updateSliders() {
+            document.getElementById('ctrl-alpha').value = Math.round(alpha * 180 / Math.PI);
+            document.getElementById('ctrl-theta').value = Math.round(theta * 180 / Math.PI);
+            document.getElementById('ctrl-phi').value = Math.round(phi * 180 / Math.PI);
+        }
+
+        function draw() {
+            document.getElementById('val-alpha').textContent = (alpha * 180 / Math.PI).toFixed(0) + '°';
+            document.getElementById('val-theta').textContent = (theta * 180 / Math.PI).toFixed(0) + '°';
+            document.getElementById('val-phi').textContent = (phi * 180 / Math.PI).toFixed(0) + '°';
+            
+            drawEigenvalues();
+            drawAction();
+            updateDisplays();
+            
+            if (isAnimating) {
+                animTime += 0.01 * animSpeed;
+                
+                // Smooth continuous animation
+                alpha = Math.PI * Math.sin(animTime * 0.8);
+                theta = Math.PI / 4 + Math.PI / 8 * Math.sin(animTime * 0.5);
+                phi = Math.PI * Math.sin(animTime * 0.3);
+                
+                updateSliders();
+                requestAnimationFrame(draw);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('ctrl-alpha').addEventListener('input', e => {
+            if (!isAnimating) {
+                alpha = parseFloat(e.target.value) * Math.PI / 180;
+                draw();
+            }
+        });
+
+        document.getElementById('ctrl-theta').addEventListener('input', e => {
+            if (!isAnimating) {
+                theta = parseFloat(e.target.value) * Math.PI / 180;
+                draw();
+            }
+        });
+
+        document.getElementById('ctrl-phi').addEventListener('input', e => {
+            if (!isAnimating) {
+                phi = parseFloat(e.target.value) * Math.PI / 180;
+                draw();
+            }
+        });
+
+        document.getElementById('btn-examples').addEventListener('click', () => {
+            if (isAnimating) {
+                isAnimating = false;
+                document.getElementById('btn-animate').textContent = 'Start Smooth Loop';
+                document.getElementById('btn-animate').classList.remove('active');
+            }
+            
+            const ex = examples[exampleIdx];
+            exampleIdx = (exampleIdx + 1) % examples.length;
+            
+            alpha = ex.alpha;
+            theta = ex.theta;
+            phi = ex.phi;
+            
+            updateSliders();
+            draw();
+        });
+
+        document.getElementById('btn-animate').addEventListener('click', () => {
+            isAnimating = !isAnimating;
+            document.getElementById('btn-animate').textContent = isAnimating ? 'Stop Animation' : 'Start Smooth Loop';
+            document.getElementById('btn-animate').classList.toggle('active', isAnimating);
+            if (isAnimating) draw();
+        });
+
+        // Speed selector
+        document.querySelectorAll('.speed-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                animSpeed = parseFloat(btn.dataset.speed);
+            });
+        });
+
+        // Initial draw
+        draw();
+    </script>
+</body>
+</html>
