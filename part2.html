@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 2.2 - Shirin Shafaie</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151933;
+            --bg-tertiary: #1e2341;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent-blue: #4285f4;
+            --accent-green: #34a853;
+            --accent-yellow: #fbbc04;
+            --accent-red: #ea4335;
+            --accent-purple: #b388ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .student-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+        }
+
+        .proof-box {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .theorem {
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.15), rgba(52, 168, 83, 0.15));
+            border: 2px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 12px;
+        }
+
+        .theorem-title {
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.1em;
+        }
+
+        .step {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-blue);
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+
+        .viz-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .viz-panel {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .viz-panel.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .viz-title {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            font-weight: 500;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 400px;
+            background: var(--bg-primary);
+        }
+
+        .controls {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .control-group {
+            margin: 1rem 0;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-value {
+            color: var(--accent-yellow);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: var(--glass);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .button {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+        }
+
+        .button.active {
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-yellow));
+        }
+
+        .matrix-display {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 1rem 0;
+        }
+
+        .verification-box {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--accent-green);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .verification-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+        }
+
+        .verification-value {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .series-terms {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .term-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 1rem;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        .term-row:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 1024px) {
+            .viz-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="student-info">Shirin Shafaie · Due: 21 October 2025</div>
+            <div class="course-info">Geometry of Quantum Mechanics, Assignment 2 · Professor Marco Gualtieri · Fields Institute</div>
+            <h1>Exercise 2: Unitary Groups and Hermitian Operators</h1>
+            <div style="font-size: 0.9em; color: var(--text-secondary); margin-top: 1rem;">
+                <strong>Question 2:</strong> Exponential representation U = e^X for skew-adjoint X
+            </div>
+        </div>
+
+        <!-- THEOREM STATEMENT -->
+        <div class="section">
+            <div class="theorem">
+                <div class="theorem-title">Theorem (Exponential Representation of Unitary Operators)</div>
+                <p><strong>Statement:</strong> Any unitary operator $U: V \to V$ may be written as $U = e^X$ for some skew-adjoint operator $X$ (meaning $X = -X^*$).</p>
+                <p style="margin-top: 1rem;"><strong>Notation:</strong> The exponential is defined by the convergent power series:
+                $$e^X = \sum_{k=0}^{\infty} \frac{1}{k!}X^k = I + X + \frac{X^2}{2!} + \frac{X^3}{3!} + \cdots$$
+                </p>
+            </div>
+        </div>
+
+        <!-- PROOF -->
+        <div class="section">
+            <div class="section-title">Proof</div>
+            
+            <div class="proof-box">
+                <p><strong>Strategy:</strong> Use the spectral theorem from Question 1 to diagonalize $U$, construct $X$ from the logarithms of eigenvalues, and verify all properties.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Diagonalize the unitary operator</strong>
+                <p style="margin-top: 0.5rem;">From Question 1, we know $U$ has an orthonormal eigenbasis $(e_1, \ldots, e_n)$ with eigenvalues $\lambda_j$ satisfying $|\lambda_j| = 1$.</p>
+                <p style="margin-top: 0.5rem;">Since $|\lambda_j| = 1$, we can write each eigenvalue uniquely as:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$\lambda_j = e^{i\theta_j}$$
+                </div>
+                <p>where $\theta_j \in [0, 2\pi)$ is the argument of $\lambda_j$ on the unit circle.</p>
+                <p style="margin-top: 0.5rem;">In the eigenbasis, $U$ has the diagonal form:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U = \begin{pmatrix}
+                    e^{i\theta_1} & 0 & \cdots & 0 \\
+                    0 & e^{i\theta_2} & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & e^{i\theta_n}
+                    \end{pmatrix}$$
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Construct the skew-adjoint operator X</strong>
+                <p style="margin-top: 0.5rem;">Define $X$ in the same eigenbasis as the diagonal matrix:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$X = \begin{pmatrix}
+                    i\theta_1 & 0 & \cdots & 0 \\
+                    0 & i\theta_2 & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & i\theta_n
+                    \end{pmatrix}$$
+                </div>
+                <p style="margin-top: 0.5rem;"><strong>Key observation:</strong> Each diagonal entry is $i\theta_j$ where $\theta_j$ is real. These are pure imaginary numbers.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Verify X is skew-adjoint</strong>
+                <p style="margin-top: 0.5rem;">We need to show $X = -X^*$. For a diagonal matrix with diagonal entries $x_j$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$X^* = \begin{pmatrix}
+                    \overline{i\theta_1} & 0 & \cdots & 0 \\
+                    0 & \overline{i\theta_2} & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & \overline{i\theta_n}
+                    \end{pmatrix}$$
+                </div>
+                <p>Since $\theta_j$ is real, $\overline{i\theta_j} = -i\theta_j$. Therefore:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$X^* = \begin{pmatrix}
+                    -i\theta_1 & 0 & \cdots & 0 \\
+                    0 & -i\theta_2 & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & -i\theta_n
+                    \end{pmatrix} = -X$$
+                </div>
+                <p style="margin-top: 0.5rem;">Thus $X$ is skew-adjoint. ✓</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <strong>Compute e^X and show it equals U</strong>
+                <p style="margin-top: 0.5rem;">For a diagonal matrix $X = \text{diag}(x_1, \ldots, x_n)$, the exponential is:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$e^X = \text{diag}(e^{x_1}, \ldots, e^{x_n})$$
+                </div>
+                <p><em>Proof:</em> Each power $X^k = \text{diag}(x_1^k, \ldots, x_n^k)$, so:
+                $$e^X = \sum_{k=0}^{\infty} \frac{1}{k!}X^k = \text{diag}\left(\sum_{k=0}^{\infty} \frac{x_1^k}{k!}, \ldots, \sum_{k=0}^{\infty} \frac{x_n^k}{k!}\right) = \text{diag}(e^{x_1}, \ldots, e^{x_n})$$
+                </p>
+                <p style="margin-top: 0.5rem;">Applying this to our $X = \text{diag}(i\theta_1, \ldots, i\theta_n)$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$e^X = \begin{pmatrix}
+                    e^{i\theta_1} & 0 & \cdots & 0 \\
+                    0 & e^{i\theta_2} & \cdots & 0 \\
+                    \vdots & \vdots & \ddots & \vdots \\
+                    0 & 0 & \cdots & e^{i\theta_n}
+                    \end{pmatrix} = U$$
+                </div>
+                <p style="margin-top: 0.5rem;">Therefore $U = e^X$. ✓</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <strong>General case (non-diagonal form)</strong>
+                <p style="margin-top: 0.5rem;">The above construction was in the eigenbasis where both $U$ and $X$ are diagonal. In an arbitrary basis, if $P$ is the change-of-basis matrix to the eigenbasis:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$U = P \, \text{diag}(e^{i\theta_1}, \ldots, e^{i\theta_n}) \, P^{-1}$$
+                    $$X = P \, \text{diag}(i\theta_1, \ldots, i\theta_n) \, P^{-1}$$
+                </div>
+                <p>Since $P$ is unitary, $P^{-1} = P^*$. The exponential satisfies:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$e^{PDP^*} = P e^D P^*$$
+                </div>
+                <p>for any diagonal $D$. Therefore $U = e^X$ in any basis. ✓</p>
+            </div>
+
+            <div class="proof-box">
+                <p><strong>Physical interpretation:</strong> This theorem establishes the fundamental connection between:</p>
+                <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                    <li><strong>Unitary operators</strong> (finite transformations): rotations, phase shifts, time evolution</li>
+                    <li><strong>Skew-adjoint operators</strong> (infinitesimal generators): Hamiltonians (times i), angular momentum operators</li>
+                </ul>
+                <p style="margin-top: 0.5rem;">In quantum mechanics: $U(t) = e^{-iHt/\hbar}$ where $H$ is the Hamiltonian. Here $X = -iHt/\hbar$ is skew-adjoint.</p>
+            </div>
+        </div>
+
+        <!-- DIFFERENTIAL EQUATION CONNECTION -->
+        <div class="section">
+            <div class="section-title">Connection to Differential Equations</div>
+            
+            <div class="proof-box">
+                <p><strong>Claim:</strong> $e^{tX}$ is the unique solution to the initial value problem:
+                $$\frac{dF}{dt} = XF, \quad F(0) = I$$
+                </p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <strong>Verify F(t) = e^(tX) satisfies the differential equation</strong>
+                <p style="margin-top: 0.5rem;">Differentiate term by term:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$\frac{d}{dt}e^{tX} = \frac{d}{dt}\sum_{k=0}^{\infty} \frac{(tX)^k}{k!} = \sum_{k=1}^{\infty} \frac{k \cdot t^{k-1} X^k}{k!} = \sum_{k=1}^{\infty} \frac{t^{k-1} X^k}{(k-1)!}$$
+                </div>
+                <p>Reindex with $j = k-1$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$= \sum_{j=0}^{\infty} \frac{t^j X^{j+1}}{j!} = X \sum_{j=0}^{\infty} \frac{(tX)^j}{j!} = X e^{tX}$$
+                </div>
+                <p style="margin-top: 0.5rem;">Thus $\frac{d}{dt}e^{tX} = Xe^{tX}$. ✓</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <strong>Verify initial condition</strong>
+                <p style="margin-top: 0.5rem;">At $t = 0$:</p>
+                <div style="margin: 1rem 0; padding-left: 3rem;">
+                    $$e^{0 \cdot X} = e^0 = I + 0 + 0 + \cdots = I$$
+                </div>
+                <p style="margin-top: 0.5rem;">Initial condition satisfied. ✓</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <strong>Uniqueness</strong>
+                <p style="margin-top: 0.5rem;">The solution to $dF/dt = XF$ with $F(0) = I$ is unique by standard ODE theory (Picard-Lindelöf theorem for matrix equations).</p>
+                <p style="margin-top: 0.5rem;">Therefore $e^{tX}$ is <em>the</em> solution, and $e^X = e^{1 \cdot X}$ is the value at time $t = 1$.</p>
+            </div>
+        </div>
+
+        <!-- INTERACTIVE EXPLORATION -->
+        <div class="section">
+            <div class="section-title">Interactive Exploration: Computing U = e^X</div>
+            
+            <p style="margin-bottom: 1.5rem;">
+                Choose a unitary matrix $U$ (by adjusting parameters). We compute its matrix logarithm $X = \log(U)$ and verify:
+                (1) $X$ is skew-adjoint, (2) the exponential series converges, (3) $e^X = U$.
+            </p>
+
+            <div class="viz-container">
+                <div class="viz-panel">
+                    <div class="viz-title">Eigenvalue Correspondence: e^(iθ) ↔ iθ</div>
+                    <canvas id="eigenvalue-canvas"></canvas>
+                </div>
+                <div class="viz-panel">
+                    <div class="viz-title">Time Evolution: e^(tX) from t=0 to t=1</div>
+                    <canvas id="evolution-canvas"></canvas>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label class="control-label">Angle θ₁: <span class="control-value" id="val-theta1">45°</span></label>
+                    <input type="range" id="ctrl-theta1" min="0" max="360" value="45" step="1">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Angle θ₂: <span class="control-value" id="val-theta2">135°</span></label>
+                    <input type="range" id="ctrl-theta2" min="0" max="360" value="135" step="1">
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Time t for evolution: <span class="control-value" id="val-time">0.50</span></label>
+                    <input type="range" id="ctrl-time" min="0" max="100" value="50" step="1">
+                </div>
+                <button class="button" id="btn-animate">Animate Time Evolution</button>
+            </div>
+        </div>
+
+        <!-- VERIFICATION -->
+        <div class="section">
+            <div class="section-title">Numerical Verification</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="matrix-display">
+                    <div style="margin-bottom: 1rem;"><strong>Unitary Matrix U:</strong></div>
+                    <div id="matrix-u" style="font-size: 1em;"></div>
+                </div>
+                
+                <div class="matrix-display">
+                    <div style="margin-bottom: 1rem;"><strong>Skew-Adjoint Matrix X:</strong></div>
+                    <div id="matrix-x" style="font-size: 1em;"></div>
+                </div>
+            </div>
+
+            <div class="verification-box">
+                <div style="font-weight: 600; margin-bottom: 1rem; color: var(--accent-green);">Verification Checks</div>
+                
+                <div class="verification-item">
+                    <div>Skew-adjoint: ||X + X*||</div>
+                    <div class="verification-value" id="verify-skew">0.000000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>Eigenvalue check: |e^(iθ₁)| and |e^(iθ₂)|</div>
+                    <div class="verification-value" id="verify-unit">1.000, 1.000</div>
+                </div>
+                
+                <div class="verification-item">
+                    <div>Exponential accuracy: ||e^X - U||</div>
+                    <div class="verification-value" id="verify-exp">0.000000</div>
+                </div>
+
+                <div class="verification-item">
+                    <div>Series convergence: terms needed</div>
+                    <div class="verification-value" id="verify-terms">20</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <div style="font-weight: 600; margin-bottom: 1rem; color: var(--accent-blue);">Exponential Series: e^X = Σ X^k/k!</div>
+                <div class="series-terms" id="series-display"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Canvas setup
+        function setupCanvas(id) {
+            const canvas = document.getElementById(id);
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            return { ctx, width: rect.width, height: rect.height };
+        }
+
+        // Complex number operations
+        const C = {
+            add: (a, b) => ({ re: a.re + b.re, im: a.im + b.im }),
+            sub: (a, b) => ({ re: a.re - b.re, im: a.im - b.im }),
+            mul: (a, b) => ({ re: a.re * b.re - a.im * b.im, im: a.re * b.im + a.im * b.re }),
+            conj: (a) => ({ re: a.re, im: -a.im }),
+            abs: (a) => Math.sqrt(a.re * a.re + a.im * a.im),
+            arg: (a) => Math.atan2(a.im, a.re),
+            exp: (theta) => ({ re: Math.cos(theta), im: Math.sin(theta) }),
+            scale: (a, s) => ({ re: a.re * s, im: a.im * s }),
+            div: (a, b) => {
+                const denom = b.re * b.re + b.im * b.im;
+                return {
+                    re: (a.re * b.re + a.im * b.im) / denom,
+                    im: (a.im * b.re - a.re * b.im) / denom
+                };
+            }
+        };
+
+        // Matrix operations (2x2 complex)
+        const M = {
+            mul: (A, B) => [
+                [C.add(C.mul(A[0][0], B[0][0]), C.mul(A[0][1], B[1][0])),
+                 C.add(C.mul(A[0][0], B[0][1]), C.mul(A[0][1], B[1][1]))],
+                [C.add(C.mul(A[1][0], B[0][0]), C.mul(A[1][1], B[1][0])),
+                 C.add(C.mul(A[1][0], B[0][1]), C.mul(A[1][1], B[1][1]))]
+            ],
+            
+            add: (A, B) => [
+                [C.add(A[0][0], B[0][0]), C.add(A[0][1], B[0][1])],
+                [C.add(A[1][0], B[1][0]), C.add(A[1][1], B[1][1])]
+            ],
+            
+            adj: (A) => [
+                [C.conj(A[0][0]), C.conj(A[1][0])],
+                [C.conj(A[0][1]), C.conj(A[1][1])]
+            ],
+            
+            sub: (A, B) => [
+                [C.sub(A[0][0], B[0][0]), C.sub(A[0][1], B[0][1])],
+                [C.sub(A[1][0], B[1][0]), C.sub(A[1][1], B[1][1])]
+            ],
+            
+            scale: (A, s) => [
+                [C.scale(A[0][0], s), C.scale(A[0][1], s)],
+                [C.scale(A[1][0], s), C.scale(A[1][1], s)]
+            ],
+            
+            norm: (A) => Math.sqrt(
+                C.abs(A[0][0])**2 + C.abs(A[0][1])**2 +
+                C.abs(A[1][0])**2 + C.abs(A[1][1])**2
+            ),
+            
+            identity: () => [
+                [{re: 1, im: 0}, {re: 0, im: 0}],
+                [{re: 0, im: 0}, {re: 1, im: 0}]
+            ]
+        };
+
+        // Build diagonal unitary from angles
+        function buildDiagonalUnitary(theta1, theta2) {
+            return [
+                [C.exp(theta1), {re: 0, im: 0}],
+                [{re: 0, im: 0}, C.exp(theta2)]
+            ];
+        }
+
+        // Build diagonal skew-adjoint from angles
+        function buildDiagonalSkewAdjoint(theta1, theta2) {
+            return [
+                [{re: 0, im: theta1}, {re: 0, im: 0}],
+                [{re: 0, im: 0}, {re: 0, im: theta2}]
+            ];
+        }
+
+        // Compute matrix exponential via series (for diagonal matrix)
+        function matrixExp(X, maxTerms = 30) {
+            let result = M.identity();
+            let term = M.identity();
+            const terms = [{ k: 0, norm: M.norm(term) }];
+            
+            for (let k = 1; k < maxTerms; k++) {
+                term = M.mul(term, X);
+                term = M.scale(term, 1/k);
+                result = M.add(result, term);
+                
+                const normTerm = M.norm(term);
+                terms.push({ k, norm: normTerm });
+                
+                if (normTerm < 1e-14) break;
+            }
+            
+            return { matrix: result, terms };
+        }
+
+        // Format complex number
+        function formatComplex(z, prec = 3) {
+            const r = Math.abs(z.re) < 1e-10 ? 0 : z.re;
+            const i = Math.abs(z.im) < 1e-10 ? 0 : z.im;
+            
+            if (i === 0) return r.toFixed(prec);
+            if (r === 0) return (i >= 0 ? '' : '-') + Math.abs(i).toFixed(prec) + 'i';
+            
+            const sign = i >= 0 ? '+' : '-';
+            return `${r.toFixed(prec)} ${sign} ${Math.abs(i).toFixed(prec)}i`;
+        }
+
+        // State
+        let theta1 = Math.PI / 4;
+        let theta2 = 3 * Math.PI / 4;
+        let time = 0.5;
+        let isAnimating = false;
+
+        // Drawing functions
+        function drawEigenvalues() {
+            const { ctx, width, height } = setupCanvas('eigenvalue-canvas');
+            ctx.clearRect(0, 0, width, height);
+            
+            const cx = width / 2;
+            const cy = height / 2;
+            const r = Math.min(width, height) * 0.3;
+            
+            // Unit circle
+            ctx.strokeStyle = '#4285f4';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(width, cy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, height);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#9aa0a6';
+            ctx.font = '12px monospace';
+            ctx.fillText('Re', width - 30, cy - 10);
+            ctx.fillText('Im', cx + 10, 20);
+            
+            // Draw eigenvalues e^(iθ) on circle
+            const lambda1 = C.exp(theta1);
+            const lambda2 = C.exp(theta2);
+            
+            const x1 = cx + r * lambda1.re;
+            const y1 = cy - r * lambda1.im;
+            const x2 = cx + r * lambda2.re;
+            const y2 = cy - r * lambda2.im;
+            
+            // Lines to eigenvalues
+            ctx.strokeStyle = '#34a853';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#fbbc04';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            
+            // Eigenvalue dots
+            ctx.fillStyle = '#34a853';
+            ctx.beginPath();
+            ctx.arc(x1, y1, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.beginPath();
+            ctx.arc(x2, y2, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#34a853';
+            ctx.font = '14px monospace';
+            ctx.fillText('e^(iθ₁)', x1 + 12, y1);
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.fillText('e^(iθ₂)', x2 + 12, y2);
+            
+            // Draw corresponding logarithms iθ
+            const scale2 = r * 0.6;
+            const logX1 = cx;
+            const logY1 = cy - theta1 * scale2 / Math.PI;
+            const logX2 = cx;
+            const logY2 = cy - theta2 * scale2 / Math.PI;
+            
+            ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = '#34a853';
+            ctx.globalAlpha = 0.5;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(logX1, logY1);
+            ctx.stroke();
+            
+            ctx.strokeStyle = '#fbbc04';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(logX2, logY2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.globalAlpha = 1;
+            
+            // Imaginary axis label
+            ctx.fillStyle = '#9aa0a6';
+            ctx.font = '11px monospace';
+            ctx.fillText('iθ₁', logX1 + 8, logY1);
+            ctx.fillText('iθ₂', logX2 + 8, logY2);
+        }
+
+        function drawEvolution() {
+            const { ctx, width, height } = setupCanvas('evolution-canvas');
+            ctx.clearRect(0, 0, width, height);
+            
+            const cx = width / 2;
+            const cy = height / 2;
+            const r = Math.min(width, height) * 0.3;
+            
+            // Axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(width, cy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, height);
+            ctx.stroke();
+            
+            // Draw path from t=0 to t=1 for both eigenvalues
+            const steps = 50;
+            
+            // Path for lambda1
+            ctx.strokeStyle = '#34a853';
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.3;
+            ctx.beginPath();
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const angle = theta1 * t;
+                const lambda = C.exp(angle);
+                const x = cx + r * lambda.re;
+                const y = cy - r * lambda.im;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            
+            // Path for lambda2
+            ctx.strokeStyle = '#fbbc04';
+            ctx.beginPath();
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                const angle = theta2 * t;
+                const lambda = C.exp(angle);
+                const x = cx + r * lambda.re;
+                const y = cy - r * lambda.im;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+            
+            // Current position at time t
+            const angle1 = theta1 * time;
+            const angle2 = theta2 * time;
+            const lambda1t = C.exp(angle1);
+            const lambda2t = C.exp(angle2);
+            
+            const x1 = cx + r * lambda1t.re;
+            const y1 = cy - r * lambda1t.im;
+            const x2 = cx + r * lambda2t.re;
+            const y2 = cy - r * lambda2t.im;
+            
+            // Current position dots
+            ctx.fillStyle = '#34a853';
+            ctx.beginPath();
+            ctx.arc(x1, y1, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.beginPath();
+            ctx.arc(x2, y2, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Labels
+            ctx.fillStyle = '#34a853';
+            ctx.font = '14px monospace';
+            ctx.fillText(`e^(it θ₁)`, x1 + 12, y1);
+            
+            ctx.fillStyle = '#fbbc04';
+            ctx.fillText(`e^(it θ₂)`, x2 + 12, y2);
+            
+            // Time indicator
+            ctx.fillStyle = '#e8eaed';
+            ctx.font = '16px monospace';
+            ctx.fillText(`t = ${time.toFixed(2)}`, 20, 30);
+            ctx.fillText('t = 0', cx - 40, cy + 20);
+            ctx.fillText('t = 1', cx + r + 20, 30);
+        }
+
+        function updateDisplays() {
+            const U = buildDiagonalUnitary(theta1, theta2);
+            const X = buildDiagonalSkewAdjoint(theta1, theta2);
+            
+            // Display matrices
+            document.getElementById('matrix-u').innerHTML = `
+                [ ${formatComplex(U[0][0])}    ${formatComplex(U[0][1])} ]<br>
+                [ ${formatComplex(U[1][0])}    ${formatComplex(U[1][1])} ]
+            `;
+            
+            document.getElementById('matrix-x').innerHTML = `
+                [ ${formatComplex(X[0][0])}    ${formatComplex(X[0][1])} ]<br>
+                [ ${formatComplex(X[1][0])}    ${formatComplex(X[1][1])} ]
+            `;
+            
+            // Compute exponential
+            const expResult = matrixExp(X);
+            const expX = expResult.matrix;
+            
+            // Verification
+            const Xadj = M.adj(X);
+            const XplusXadj = M.add(X, Xadj);
+            const skewError = M.norm(XplusXadj);
+            
+            const expError = M.norm(M.sub(expX, U));
+            
+            document.getElementById('verify-skew').textContent = skewError.toExponential(6);
+            document.getElementById('verify-unit').textContent = `${C.abs(U[0][0]).toFixed(6)}, ${C.abs(U[1][1]).toFixed(6)}`;
+            document.getElementById('verify-exp').textContent = expError.toExponential(6);
+            document.getElementById('verify-terms').textContent = expResult.terms.length;
+            
+            // Display series terms
+            const seriesDiv = document.getElementById('series-display');
+            seriesDiv.innerHTML = expResult.terms.slice(0, 15).map(t => `
+                <div class="term-row">
+                    <div>k = ${t.k}</div>
+                    <div>X^${t.k}/${t.k}!</div>
+                    <div>||term|| = ${t.norm.toExponential(2)}</div>
+                </div>
+            `).join('');
+        }
+
+        function draw() {
+            document.getElementById('val-theta1').textContent = (theta1 * 180 / Math.PI).toFixed(0) + '°';
+            document.getElementById('val-theta2').textContent = (theta2 * 180 / Math.PI).toFixed(0) + '°';
+            document.getElementById('val-time').textContent = time.toFixed(2);
+            
+            drawEigenvalues();
+            drawEvolution();
+            updateDisplays();
+            
+            if (isAnimating) {
+                time += 0.01;
+                if (time > 1) time = 0;
+                document.getElementById('ctrl-time').value = time * 100;
+                requestAnimationFrame(draw);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('ctrl-theta1').addEventListener('input', e => {
+            theta1 = parseFloat(e.target.value) * Math.PI / 180;
+            draw();
+        });
+
+        document.getElementById('ctrl-theta2').addEventListener('input', e => {
+            theta2 = parseFloat(e.target.value) * Math.PI / 180;
+            draw();
+        });
+
+        document.getElementById('ctrl-time').addEventListener('input', e => {
+            time = parseFloat(e.target.value) / 100;
+            draw();
+        });
+
+        document.getElementById('btn-animate').addEventListener('click', () => {
+            isAnimating = !isAnimating;
+            document.getElementById('btn-animate').textContent = isAnimating ? 'Stop Animation' : 'Animate Time Evolution';
+            document.getElementById('btn-animate').classList.toggle('active', isAnimating);
+            if (isAnimating) draw();
+        });
+
+        // Initial draw
+        draw();
+    </script>
+</body>
+</html>
